@@ -1,6 +1,5 @@
-package Test;
+package ParseCSVtoSQLite;
 import java.io.*;
-import java.lang.annotation.*;
 import java.nio.file.*;
 import java.text.*;
 import java.util.*;
