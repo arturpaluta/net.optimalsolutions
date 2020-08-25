@@ -19,6 +19,18 @@ public class ParseCSV {
     static boolean I;
     static String J;
 
+    private static void parseErrors (String[] fields, BufferedWriter bw) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        // Append strings from array
+        for (String element : fields) {
+            sb.append(element);
+            sb.append(",");
+        }
+        //sb.append("\n");
+        bw.write(sb.toString());
+        bw.newLine();
+        bw.flush();
+    }
 
 
     public static void main(String[] args) throws FileNotFoundException, IOException, ParseException {
@@ -38,16 +50,18 @@ public class ParseCSV {
                 if("".equals(fields[0]) || "".equals(fields[1]) || "".equals(fields[2]) || "".equals(fields[3]) || "".equals(fields[4])
                 || "".equals(fields[5]) || "".equals(fields[6]) || "".equals(fields[7])
                 || "".equals(fields[8]) || "".equals(fields[9]))
-                {   StringBuilder sb = new StringBuilder();
-                    // Append strings from array
-                    for (String element : fields) {
-                        sb.append(element);
-                        sb.append(",");
-                    }
-                    //sb.append("\n");
-                    bw.write(sb.toString());
-                    bw.newLine();
-                    bw.flush();
+                {
+                    parseErrors(fields, bw);
+//                   StringBuilder sb = new StringBuilder();
+//                    // Append strings from array
+//                    for (String element : fields) {
+//                        sb.append(element);
+//                        sb.append(",");
+//                    }
+//                    //sb.append("\n");
+//                    bw.write(sb.toString());
+//                    bw.newLine();
+//                    bw.flush();
                     continue;
                 }else{
                     A = fields[0];

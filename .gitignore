@@ -1,4 +1,5 @@
 HelloWorld.*
+bad-data*.csv
 # Intellij
 .idea/
 *.iml
