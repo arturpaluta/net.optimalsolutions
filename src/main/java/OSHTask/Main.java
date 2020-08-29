@@ -13,6 +13,7 @@ public class Main {
     static Path csvPath = Paths.get(RESOURCES + "Interview-task-data-osh.csv");
     static String badDataFileName = new SimpleDateFormat("'bad-data-'yyyy-MM-dd-HH-mm'.csv'").format(new Date());
     static Path pathErr = Paths.get(RESOURCES + badDataFileName);
+    static Path pathLog = Paths.get(RESOURCES + "logFile.log");
     //static Path sqlPath = Paths.get(RESOURCES + "sqlite.db");
 
 
@@ -21,6 +22,11 @@ public class Main {
             ParseErrorsToCsv parseErr = new ParseErrorsToCsv(pathErr);
             CSVtoSQL csVtoSQLite = new CSVtoSQLite();
             parseCSV.parseCSV(parseErr, csVtoSQLite);
-        System.out.println("Successfully added "+ CSVtoSQLite.result + " records");
+            LogFile logFile = new LogFile();
+            String log = "Successfully added "+ CSVtoSQLite.result + " records, \nFailed records: "
+                    +parseErr.failedRecords;
+            System.out.println(log);
+            logFile.log(pathLog, log);
+
     }
 }

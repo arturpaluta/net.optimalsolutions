@@ -22,15 +22,16 @@ public class ParseCSV {
         int k = 0;
         while (!"".equals(fields[k]) && k < fields.length - 1)
             k++;
-        if (k < fields.length - 1 || fields.length>tableSize) check = 0;
+        if (k < fields.length - 1 || fields.length > tableSize) check = 0;
         else check = 1;
     }
 
     public void parseCSV(ParseErrors parseErrors, CSVtoSQL csVtoSQL) throws IOException {
+        BufferedReader br = null;
         try {
-            BufferedReader br = new BufferedReader(new FileReader(String.valueOf(csvPath)));
+            br = new BufferedReader(new FileReader(String.valueOf(csvPath)));
             String[] s1 = br.readLine().split(splitRegex, -1);
-            this.tableSize = s1.length;
+            tableSize = s1.length;
             csVtoSQL.createTable(s1);
             csVtoSQL.setFields(s1);
             String line;
@@ -45,12 +46,15 @@ public class ParseCSV {
                     csVtoSQL.insert(fields);
                 }
             }
-
-            br.close();
-
         } catch (IOException | SQLException e) {
             e.printStackTrace();
+        } finally {
+            if (br != null)
+                try {
+                    br.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
         }
-
     }
 }

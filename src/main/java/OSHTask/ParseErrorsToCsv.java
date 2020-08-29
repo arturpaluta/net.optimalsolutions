@@ -11,6 +11,7 @@ import java.util.Date;
 public class ParseErrorsToCsv implements ParseErrors  {
     private Path pathErr;
     BufferedWriter bw;
+    static int failedRecords;
 
     public ParseErrorsToCsv(Path pathErr2) throws IOException {
         this.pathErr = pathErr2;
@@ -29,6 +30,7 @@ public class ParseErrorsToCsv implements ParseErrors  {
             bw.write(sb.toString());
             bw.newLine();
             bw.flush();
+            failedRecords++;
         } catch (IOException e) {
             e.printStackTrace();
         }
