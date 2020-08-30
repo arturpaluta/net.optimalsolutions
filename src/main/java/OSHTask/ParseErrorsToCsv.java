@@ -4,14 +4,14 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 public class ParseErrorsToCsv implements ParseErrors  {
     private Path pathErr;
     BufferedWriter bw;
     static int failedRecords;
+    public int getFailedRecords(){
+        return failedRecords;
+    }
 
     public ParseErrorsToCsv(Path pathErr2) throws IOException {
         this.pathErr = pathErr2;
@@ -34,8 +34,5 @@ public class ParseErrorsToCsv implements ParseErrors  {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
-
     }
-    // bw.close();
 }

@@ -5,9 +5,9 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 
 public class ParseCSV {
-    private String splitRegex;
-    private Path csvPath;  //path to & filename of .csv file
-    private Path pathErr; // complete path to error .csv file
+    private final String splitRegex;
+    private final Path csvPath;  //path to & filename of .csv file
+    private final Path pathErr; // complete path to error .csv file
     private static int tableSize = 0;
 
     ParseCSV(Path csvPath, Path pathErr, String splitRegex) {
@@ -26,7 +26,7 @@ public class ParseCSV {
         else check = 1;
     }
 
-    public void parseCSV(ParseErrors parseErrors, CSVtoSQL csVtoSQL) throws IOException {
+    public void parseCSV(ParseErrors parseErrors, CSVtoSQLInterface csVtoSQL) throws IOException {
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(String.valueOf(csvPath)));
@@ -37,8 +37,6 @@ public class ParseCSV {
             String line;
             while ((line = br.readLine()) != null) {
                 String[] fields = line.split(splitRegex, -1);
-            /*for (int i = 0; i < 25; i++) {
-                String[] fields = br.readLine().split(splitRegex, -1);*/
                 check(fields);
                 if (check == 0) {     //parseErrors;
                     parseErrors.parseErrors(fields);

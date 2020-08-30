@@ -3,28 +3,33 @@ package OSHTask;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Main {
-    public static final String RESOURCES = "src/main/resources/";
-    static String splitRegex = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
-    static Path csvPath = Paths.get(RESOURCES + "Interview-task-data-osh.csv");
-    static String badDataFileName = new SimpleDateFormat("'bad-data-'yyyy-MM-dd-HH-mm'.csv'").format(new Date());
-    static Path pathErr = Paths.get(RESOURCES + badDataFileName);
-    static Path pathLog = Paths.get(RESOURCES + "logFile.log");
+    private static final String RESOURCES = "src/main/resources/";
+    private static String splitRegex = ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)";
+    private static Path csvPath = Paths.get(RESOURCES + "Interview-task-data-osh.csv");
+    private static String badDataFileName = new SimpleDateFormat("'bad-data-'yyyy-MM-dd-HH-mm'.csv'").format(new Date());
+    private static Path pathErr = Paths.get(RESOURCES + badDataFileName);
+    private static Path pathLog = Paths.get(RESOURCES + "logFile.log");
+    private static String sqliteConnectionString = "jdbc:sqlite::memory:";
+
+    public Main() throws SQLException {
+    }
     //static Path sqlPath = Paths.get(RESOURCES + "sqlite.db");
 
 
     public static void main(String[] args) throws IOException, SQLException {
             ParseCSV parseCSV = new ParseCSV(csvPath, pathErr, splitRegex);
             ParseErrorsToCsv parseErr = new ParseErrorsToCsv(pathErr);
-            CSVtoSQL csVtoSQLite = new CSVtoSQLite();
+            CSVtoSQLInterface csVtoSQLite = new CSVtoSQL(sqliteConnectionString);
             parseCSV.parseCSV(parseErr, csVtoSQLite);
             LogFile logFile = new LogFile();
-            String log = "Successfully added "+ CSVtoSQLite.result + " records, \nFailed records: "
-                    +parseErr.failedRecords;
+            String log = "Successfully added "+ csVtoSQLite.getResult() + " records, \nFailed records: "
+                    +parseErr.getFailedRecords() + "\nTotal number of records: " + (csVtoSQLite.getResult() +parseErr.getFailedRecords()) ;
             System.out.println(log);
             logFile.log(pathLog, log);
 
