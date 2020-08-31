@@ -15,17 +15,14 @@ public class Main {
     private static String badDataFileName = new SimpleDateFormat("'bad-data-'yyyy-MM-dd-HH-mm'.csv'").format(new Date());
     private static Path pathErr = Paths.get(RESOURCES + badDataFileName);
     private static Path pathLog = Paths.get(RESOURCES + "logFile.log");
-    private static String sqliteConnectionString = "jdbc:sqlite::memory:";
 
     public Main() throws SQLException {
     }
-    //static Path sqlPath = Paths.get(RESOURCES + "sqlite.db");
-
 
     public static void main(String[] args) throws IOException, SQLException {
             ParseCSV parseCSV = new ParseCSV(csvPath, pathErr, splitRegex);
             ParseErrorsToCsv parseErr = new ParseErrorsToCsv(pathErr);
-            CSVtoSQLInterface csVtoSQLite = new CSVtoSQL(sqliteConnectionString);
+            CSVtoSQLInterface csVtoSQLite = new CSVtoSQL();
             parseCSV.parseCSV(parseErr, csVtoSQLite);
             LogFile logFile = new LogFile();
             String log = "Successfully added "+ csVtoSQLite.getResult() + " records, \nFailed records: "

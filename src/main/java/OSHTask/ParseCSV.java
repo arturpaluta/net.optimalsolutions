@@ -3,6 +3,7 @@ package OSHTask;
 import java.io.*;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.Arrays;
 
 public class ParseCSV {
     private final String splitRegex;
@@ -22,7 +23,8 @@ public class ParseCSV {
         int k = 0;
         while (!"".equals(fields[k]) && k < fields.length - 1)
             k++;
-        if (k < fields.length - 1 || fields.length > tableSize) check = 0;
+        if (k < fields.length - 1)
+            check = 0;
         else check = 1;
     }
 
@@ -35,14 +37,16 @@ public class ParseCSV {
             csVtoSQL.createTable(s1);
             csVtoSQL.setFields(s1);
             String line;
-            while ((line = br.readLine()) != null) {
+            while ((line = br.readLine()) != null) {  //while ((line = br.readLine()) != null)
                 String[] fields = line.split(splitRegex, -1);
-                check(fields);
+                if (fields.length == tableSize)
+                    check(fields);
                 if (check == 0) {     //parseErrors;
                     parseErrors.parseErrors(fields);
                 } else {
                     csVtoSQL.insert(fields);
                 }
+                check = 0;
             }
         } catch (IOException | SQLException e) {
             e.printStackTrace();
